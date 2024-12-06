@@ -7,6 +7,7 @@ export default async function handler(req, res) {
   const queryParams = new URLSearchParams(req.query).toString();
   const finalUrl = `${targetUrl}?${queryParams}`;
 
+  // Configurar encabezados para CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -20,30 +21,30 @@ export default async function handler(req, res) {
       },
     });
 
-    // Registrar detalles de la respuesta
-    console.log("Response Status:", apiResponse.status);
-    console.log("Response OK:", apiResponse.ok);
-
-    // Intentar convertir la respuesta a JSON
-    let data;
-    try {
-      data = await apiResponse.json();
-    } catch (err) {
-      console.error("Error parsing JSON response:", err);
+    // Verificar si la respuesta de la API fue exitosa
+    if (!apiResponse.ok) {
+      // Leer el texto de la respuesta solo una vez
       const errorText = await apiResponse.text();
-      console.error("Raw Response Text:", errorText);
+      console.error("Error Response Text:", errorText);
 
-      return res
-        .status(apiResponse.status)
-        .json({ error: "Error parsing JSON from API response", details: errorText });
+      return res.status(apiResponse.status).json({
+        error: "Error en la solicitud a la API externa",
+        details: errorText,
+      });
     }
 
-    // Devolver la respuesta al cliente
-    res.status(apiResponse.status).json(data);
+    // Convertir la respuesta a JSON solo una vez
+    const data = await apiResponse.json();
+
+    // Devolver los datos al cliente
+    res.status(200).json(data);
   } catch (error) {
     console.error("Fetch Error:", error);
 
     // Manejar errores de red o del servidor
-    res.status(500).json({ error: "Error fetching API", details: error.message });
+    res.status(500).json({
+      error: "Error realizando la solicitud al servidor externo",
+      details: error.message,
+    });
   }
 }
