@@ -1,23 +1,15 @@
 {
-  "name": "cors-proxy",
+  "name": "vercel-proxy",
   "version": "1.0.0",
-  "description": "CORS proxy to bypass CORS restrictions for external APIs",
+  "description": "Proxy API using Vercel",
   "main": "index.js",
-  "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel --prod"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "request": "^2.88.2"
+    "node-fetch": "^3.2.0"  // Dependencia para poder usar fetch en Node.js
   },
   "devDependencies": {
-    "vercel": "^28.1.0"
+    "vercel": "^27.0.0"  // Dependencia para manejar el despliegue de Vercel (si aún no está instalada)
   },
   "engines": {
-    "node": "16.x"
+    "node": "16.x"   // Asegurarse de que use una versión compatible de Node.js
   }
 }
