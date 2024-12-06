@@ -33,6 +33,8 @@ export default async function handler(req, res) {
     res.status(200).json(data);
   } catch (error) {
     // Si ocurre un error, devolver una respuesta con error
+
+    console.log(error)
     res.status(500).json({ error: 'Error en el servidor proxy' });
   }
 }
