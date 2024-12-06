@@ -4,7 +4,11 @@ import fetch from 'node-fetch';  // Importar node-fetch
 
 export default async function handler(req, res) {
   const targetUrl = "https://nu.mnuu.nu/api/v1/init";
-  const queryParams = req.query;
+  // Construir los parámetros de consulta
+  const queryParams = new URLSearchParams(req.query).toString();
+  
+  // Concatenar los parámetros a la URL de destino
+  const finalUrl = `${targetUrl}?${queryParams}`;
 
   // Agregar los encabezados CORS si es necesario
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,13 +16,12 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   try {
-    // Usar fetch de node-fetch
-    const apiResponse = await fetch(targetUrl, {
-      method: "GET",
+    // Realizar la solicitud GET con los parámetros de consulta
+    const apiResponse = await fetch(finalUrl, {
+      method: "GET", // Método GET sin cuerpo
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json",  // Establecer el tipo de contenido si es necesario
       },
-      body: JSON.stringify(queryParams),  // Si es necesario, puedes agregar parámetros
     });
 
     // Verificar si la respuesta de la API fue exitosa
