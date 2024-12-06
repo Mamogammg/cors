@@ -31,6 +31,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     // Si ocurre un error, devuelve el error
+    console.log(error)
     res.status(500).json({ error: 'Error en el servidor proxy' });
   }
 }
