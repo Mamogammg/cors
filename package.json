@@ -4,12 +4,12 @@
   "description": "Proxy API using Vercel",
   "main": "index.js",
   "dependencies": {
-    "node-fetch": "^3.2.0"  // Dependencia para poder usar fetch en Node.js
+    "node-fetch": "^3.2.0"
   },
   "devDependencies": {
-    "vercel": "^27.0.0"  // Dependencia para manejar el despliegue de Vercel (si aún no está instalada)
+    "vercel": "^27.0.0"
   },
   "engines": {
-    "node": "16.x"   // Asegurarse de que use una versión compatible de Node.js
+    "node": "16.x"
   }
 }
