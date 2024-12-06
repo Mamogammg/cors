@@ -24,16 +24,11 @@ export default async function handler(req, res) {
       },
     });
 
-    // Verificar si la respuesta de la API fue exitosa
-    if (!apiResponse.ok) {
-      return res.status(apiResponse.status).json({ error: 'Error en la solicitud a la API' });
-    }
-
     // Convertir la respuesta de la API en JSON
     const data = await apiResponse.json();
 
     // Devolver los datos como respuesta al cliente
-    res.status(200).json(data);
+    res.status(apiResponse.status).json(data);
   } catch (error) {
     // Si ocurre un error, devolver una respuesta con error
 
