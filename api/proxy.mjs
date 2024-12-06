@@ -24,6 +24,8 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log(apiResponse)
+
     // Convertir la respuesta de la API en JSON
     const data = await apiResponse.json();
 
