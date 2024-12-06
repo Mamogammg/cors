@@ -1,29 +1,36 @@
-const express = require('express');
-const cors = require('cors');
-const request = require('request');
+// api/proxy.js
 
-const app = express();
+export default async function handler(req, res) {
+  // URL de la API a la que quieres hacer el proxy
+  const targetUrl = "https://nu.mnuu.nu/api/v1/init";
 
-// Habilitar CORS para todas las rutas
-app.use(cors());
+  // Los parámetros de la API (puedes agregar más parámetros según sea necesario)
+  const queryParams = req.query;
 
-// Crear una ruta para manejar el proxy
-app.get('/proxy', (req, res) => {
-  const targetUrl = req.query.url; // Obtenemos la URL del query param
-  
-  if (!targetUrl) {
-    return res.status(400).send('No URL provided');
+  try {
+    // Realiza la solicitud a la API de destino
+    const apiResponse = await fetch(targetUrl, {
+      method: "GET", // o "POST", dependiendo de lo que necesites
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Si es necesario, incluye los parámetros en la URL o en el cuerpo
+      body: JSON.stringify(queryParams),
+    });
+
+    // Verifica si la solicitud fue exitosa
+    if (!apiResponse.ok) {
+      return res.status(apiResponse.status).json({ error: 'Error en la solicitud' });
+    }
+
+    // Convierte la respuesta de la API en JSON
+    const data = await apiResponse.json();
+
+    // Devuelve la respuesta al cliente
+    res.status(200).json(data);
+
+  } catch (error) {
+    // Si ocurre un error, devuelve el error
+    res.status(500).json({ error: 'Error en el servidor proxy' });
   }
-  
-  // Realizar la solicitud al servidor de destino
-  request({ url: targetUrl, headers: req.headers })
-    .on('error', (err) => {
-      res.status(500).send(`Error en la solicitud al servidor de destino: ${err.message}`);
-    })
-    .pipe(res); // Pasa la respuesta directamente al cliente
-});
-
-// Exportar como una función API
-module.exports = (req, res) => {
-  app(req, res);
-};
+}
